@@ -5,7 +5,7 @@ constant: CONFIG_PROJECT_NAME {
   export: override_required
 }
 
-constant: CONNECTION {
+constant: CONNECTION_NAME {
   #value: "bigquery-campaign-manager-connection"
   value: "db-platform-sol-cm"
   export: override_required
