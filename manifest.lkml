@@ -24,6 +24,7 @@ constant: CAMPAIGN_MANAGER_ID {
 constant: DV360_PARTNER_ID {
   ## This is used for links
   value: ""
+  export: override_optional
 }
 
 
@@ -45,6 +46,7 @@ constant: MINIMUM_CONVERSIONS_CLUSTER {
   ### This is where you can decide minimum number of conversions (exclusive) for campaigns to include in clustering model. Default is 0, so all campaigns with conversions >0
   ## To include all, make value: ""
   value: ">0"
+  export: override_optional
 }
 
 

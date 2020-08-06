@@ -1,5 +1,5 @@
 - dashboard: line_item_lookup
-  title: "(3) Line Item Lookup"
+  title: "(3) Line Item Lookup - DV360"
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
