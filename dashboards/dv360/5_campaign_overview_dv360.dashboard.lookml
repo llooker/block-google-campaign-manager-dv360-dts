@@ -1,6 +1,7 @@
 - dashboard: campaign_overview__dv360
-  title: Campaign Overview - DV360
+  title: "(1) Campaign Overview - DV360"
   layout: newspaper
+  preferred_viewer: dashboards-next
   elements:
   - name: <font color="#34A853" size="45" weight="bold"><i class="fa fa-tachometer"
       aria-hidden="true"></i><strong> DV360 Insights </strong> <font color= "#4285F4"size="45">
@@ -10,52 +11,57 @@
       aria-hidden="true"></i><strong> DV360 Insights </strong> <font color= "#4285F4"size="4.5">
       Campaign Overview </font>
     subtitle_text: How is my campaign performing?
-    body_text: |-
-      <center> <b>Recommended Action</b>👇 Drill into impressions and cross device conversions to get an overview of campaign performance.<center>
-
-      (TO-DO: add a vs. previous)
-    row: 4
-    col: 4
-    width: 16
-    height: 4
+    body_text: "<center> <b>Recommended Action</b>\U0001f447 Drill into impressions\
+      \ and cross device conversions to get an overview of campaign performance.<center>"
+    row: 2
+    col: 5
+    width: 14
+    height: 3
   - name: Campaign Attribute Breakdown
     type: text
     title_text: Campaign Attribute Breakdown
-    subtitle_text: What audiences are performing best? (@Anna if you have a better
-      way to describe this feel free to edit)
+    subtitle_text: What audiences are performing best?
     body_text: "<center> <b>Recommended Action</b>\U0001f447 Use the KPI Selector\
-      \ at the top to choose a performance metric. Drill into geo or creative to get\
-      \ a more granular view of performance. .<center>"
-    row: 29
+      \ at the top to choose a performance metric. Drill into geo or device type to\
+      \ get a more granular view of performance. .<center>"
+    row: 26
     col: 4
     width: 16
     height: 4
   - name: 'Poorly Performing Insertion Orders '
     type: text
     title_text: 'Poorly Performing Insertion Orders '
-    subtitle_text: Which IOs need attention? (Ranked 1,2,3) (NOTE USING IDS until
-      better data)
-    body_text: "<center> <b>Recommended Action</b>\U0001f447 Use the KPI Selector\
-      \ at the top to choose a performance metric. Click on an Insertion Order to\
-      \ link to the Insertion Order Lookup, where you can take action directly in\
-      \ Looker. .<center>"
-    row: 49
-    col: 0
-    width: 24
+    subtitle_text: 'Which IOs need attention? (Ranked 1,2,3). '
+    body_text: |2-
+
+      <center><i>Rankings done by Contribution to Performance. To see how that is calculated, see README</i><center>
+      <center> <b>Recommended Action</b>👇 Use the KPI Selector at the top to choose a performance metric. Click on an Insertion Order to link to the Insertion Order Lookup, where you can take action directly in Looker. .<center>
+
+      Ignore insertion orders without conversions?
+    row: 48
+    col: 3
+    width: 17
     height: 4
   - title: Overall CPA
     name: Overall CPA
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.cpa]
+    fields: [impression_funnel_dv360.cpa, impression_funnel_dv360.previous_period]
+    filters:
+      impression_funnel_dv360.previous_period: "-NULL"
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.cpa}-offset(${impression_funnel_dv360.cpa},1))/${impression_funnel_dv360.cpa}",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
-    comparison_reverse_colors: false
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
     show_comparison_label: true
     enable_conditional_formatting: false
     conditional_formatting_include_totals: false
@@ -70,78 +76,95 @@
     defaults_version: 1
     series_types: {}
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 8
+    row: 5
     col: 0
     width: 6
     height: 2
   - title: Overall CPC
     name: Overall CPC
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.cpc]
-    filters: {}
-    sorts: [impression_funnel_dv360.cpc desc]
+    fields: [impression_funnel_dv360.cpc, impression_funnel_dv360.previous_period]
+    filters:
+      impression_funnel_dv360.previous_period: "-NULL"
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.cpc}-offset(${impression_funnel_dv360.cpc},1))/offset(${impression_funnel_dv360.cpc},1)",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
-    comparison_reverse_colors: false
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
     show_comparison_label: true
     enable_conditional_formatting: false
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Metric to Compare: impression_funnel_dv360.metric_selector
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 8
+    row: 5
     col: 6
     width: 6
     height: 2
   - title: Overall CPM
     name: Overall CPM
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.cpm]
+    fields: [impression_funnel_dv360.cpm, impression_funnel_dv360.previous_period]
     filters: {}
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.cpm}-offset(${impression_funnel_dv360.cpm},1))/offset(${impression_funnel_dv360.cpm},1)",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
-    comparison_reverse_colors: false
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
     show_comparison_label: true
     enable_conditional_formatting: false
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 10
+    row: 7
     col: 6
     width: 6
     height: 2
   - title: Overall CTR
     name: Overall CTR
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.ctr]
-    filters: {}
+    fields: [impression_funnel_dv360.ctr, impression_funnel_dv360.previous_period]
+    filters:
+      impression_funnel_dv360.previous_period: "-NULL"
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.ctr}-offset(${impression_funnel_dv360.ctr},1))/offset(${impression_funnel_dv360.ctr},1)",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
+    show_comparison: true
+    comparison_type: change
     comparison_reverse_colors: false
     show_comparison_label: true
     enable_conditional_formatting: false
@@ -149,25 +172,31 @@
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 10
+    row: 7
     col: 0
     width: 6
     height: 2
   - title: Overall CR
     name: Overall CR
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.cr]
-    filters: {}
+    fields: [impression_funnel_dv360.cr, impression_funnel_dv360.previous_period]
+    filters:
+      impression_funnel_dv360.previous_period: "-NULL"
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.cr}-offset(${impression_funnel_dv360.cr},1))/offset(${impression_funnel_dv360.cr},1)",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
+    show_comparison: true
+    comparison_type: change
     comparison_reverse_colors: false
     show_comparison_label: true
     enable_conditional_formatting: false
@@ -175,25 +204,31 @@
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 12
+    row: 9
     col: 0
     width: 6
     height: 2
   - title: "% Viewable Impressions"
     name: "% Viewable Impressions"
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.percent_impressions_viewed]
-    filters: {}
+    fields: [impression_funnel_dv360.percent_impressions_viewed, impression_funnel_dv360.previous_period]
+    filters:
+      impression_funnel_dv360.previous_period: "-NULL"
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.percent_impressions_viewed}-offset(${impression_funnel_dv360.percent_impressions_viewed},1))/offset(${impression_funnel_dv360.percent_impressions_viewed},1)",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
+    show_comparison: true
+    comparison_type: change
     comparison_reverse_colors: false
     show_comparison_label: true
     enable_conditional_formatting: false
@@ -201,25 +236,32 @@
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 12
+    row: 9
     col: 6
     width: 6
     height: 2
   - title: "% Measurable Impressions"
     name: "% Measurable Impressions"
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.percent_impressions_measurable]
-    filters: {}
+    fields: [impression_funnel_dv360.percent_impressions_measurable, impression_funnel_dv360.previous_period]
+    filters:
+      impression_funnel_dv360.previous_period_filter: 7 days
+      impression_funnel_dv360.previous_period: "-NULL"
+    sorts: [impression_funnel_dv360.previous_period desc]
     limit: 500
     column_limit: 50
+    dynamic_fields: [{table_calculation: vs_previous_period, label: vs. Previous Period,
+        expression: "(${impression_funnel_dv360.percent_impressions_measurable}-offset(${impression_funnel_dv360.percent_impressions_measurable},1))/offset(${impression_funnel_dv360.percent_impressions_measurable},1)",
+        value_format: !!null '', value_format_name: percent_2, _kind_hint: measure,
+        _type_hint: number}]
     custom_color_enabled: true
     show_single_value_title: true
-    show_comparison: false
-    comparison_type: value
+    show_comparison: true
+    comparison_type: change
     comparison_reverse_colors: false
     show_comparison_label: true
     enable_conditional_formatting: false
@@ -227,15 +269,15 @@
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 14
+    row: 11
     col: 0
     width: 6
     height: 2
   - title: Top IO
     name: Top IO
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.dbm_insertion_order_id_label]
@@ -274,15 +316,15 @@
     note_text: ''
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 53
+    row: 52
     col: 0
     width: 8
     height: 2
   - title: IO 2nd
     name: IO 2nd
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.dbm_insertion_order_id_label]
@@ -318,15 +360,15 @@
     series_types: {}
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 53
+    row: 52
     col: 8
     width: 8
     height: 2
   - title: IO3
     name: IO3
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.dbm_insertion_order_id_label]
@@ -362,20 +404,21 @@
     series_types: {}
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 53
+    row: 52
     col: 16
     width: 8
     height: 2
   - title: IO Comparison
     name: IO Comparison
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_bar
-    fields: [impression_funnel_dv360.dynamic_measure, dynamic_io_rank.rank_comparitor]
-    filters:
-      dynamic_io_rank.rank_input: '1'
+    fields: [impression_funnel_dv360.dynamic_measure, dynamic_io_rank.rank_comparitor,
+      impression_funnel_dv360.dynamic_measure_for_ranking_io_contribution_to_performance,
+      impression_funnel_dv360.dbm_revenue]
+    filters: {}
     sorts: [dynamic_io_rank.rank_comparitor]
     limit: 500
     column_limit: 50
@@ -386,7 +429,7 @@
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
-    show_x_axis_label: true
+    show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
     x_axis_reversed: false
@@ -396,17 +439,31 @@
     stacking: ''
     limit_displayed_rows: false
     legend_position: center
-    point_style: none
+    point_style: circle_outline
     show_value_labels: true
     label_density: 25
     x_axis_scale: auto
     y_axis_combined: true
     ordering: none
-    show_null_labels: false
+    show_null_labels: true
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
-    series_types: {}
+    y_axes: [{label: !!null '', orientation: top, series: [{axisId: impression_funnel_dv360.dynamic_measure,
+            id: impression_funnel_dv360.dynamic_measure, name: CTR}], showLabels: false,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}, {label: !!null '', orientation: top, series: [{axisId: impression_funnel_dv360.dynamic_measure_for_ranking_io_contribution_to_performance,
+            id: impression_funnel_dv360.dynamic_measure_for_ranking_io_contribution_to_performance,
+            name: Contribution to Performance}], showLabels: false, showValues: false,
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear},
+      {label: '', orientation: bottom, series: [{axisId: impression_funnel_dv360.dbm_revenue,
+            id: impression_funnel_dv360.dbm_revenue, name: Total Spend}], showLabels: false,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    size_by_field: impression_funnel_dv360.dbm_revenue
+    series_types:
+      impression_funnel_dv360.dynamic_measure_for_ranking_io_contribution_to_performance: line
+      impression_funnel_dv360.dbm_revenue: scatter
     custom_color_enabled: true
     show_single_value_title: true
     show_comparison: false
@@ -428,27 +485,27 @@
     rows_font_size: 12
     defaults_version: 1
     hidden_fields:
+    show_null_points: true
+    interpolation: linear
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 57
+    row: 56
     col: 0
     width: 12
     height: 8
   - title: Performance by Device Type
     name: Performance by Device Type
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_column
-    fields: [impression_funnel_dv360.dynamic_measure_label, impression_funnel_dv360.dbm_device_type_name]
-    filters:
-      impression_funnel_dv360.dbm_browser_platform_id: "-NULL"
-      impression_funnel_dv360.dynamic_measure: NOT NULL
-    sorts: [impression_funnel_dv360.dynamic_measure_label desc]
+    fields: [impression_funnel_dv360.dynamic_measure_label, impression_funnel_dv360.DBM_Device_Type_Name,
+      impression_funnel_dv360.dbm_attributed_inventory_source_is_public]
+    pivots: [impression_funnel_dv360.dbm_attributed_inventory_source_is_public]
+    sorts: [impression_funnel_dv360.dynamic_measure_label desc 0, impression_funnel_dv360.dbm_attributed_inventory_source_is_public]
     limit: 500
-    column_limit: 3
-    row_total: right
+    column_limit: 50
     x_axis_gridlines: false
     y_axis_gridlines: false
     show_view_names: false
@@ -456,7 +513,7 @@
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
-    show_x_axis_label: true
+    show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
     x_axis_reversed: false
@@ -476,9 +533,19 @@
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: impression_funnel_dv360.dynamic_measure_label,
+            id: false - impression_funnel_dv360.dynamic_measure_label, name: Private},
+          {axisId: impression_funnel_dv360.dynamic_measure_label, id: true - impression_funnel_dv360.dynamic_measure_label,
+            name: Public}], showLabels: true, showValues: false, unpinAxis: false,
+        tickDensity: default, tickDensityCustom: 5, type: linear}]
     hidden_series: [Row Total - impression_funnel_dv360.dynamic_measure]
     hide_legend: false
     series_types: {}
+    series_colors:
+      true - impression_funnel_dv360.dynamic_measure_label: "#FBBC04"
+    series_labels:
+      false - impression_funnel_dv360.dynamic_measure_label: Private
+      true - impression_funnel_dv360.dynamic_measure_label: Public
     show_row_numbers: true
     transpose: false
     truncate_text: true
@@ -495,15 +562,15 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 41
-    col: 12
+    row: 30
+    col: 0
     width: 12
     height: 8
   - title: Top Metric
     name: Top Metric
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.dynamic_measure_label]
@@ -523,15 +590,15 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 55
-    col: 8
+    row: 54
+    col: 0
     width: 4
     height: 2
   - title: Second Metric
     name: Second Metric
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.dynamic_measure_label]
@@ -551,15 +618,15 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 55
-    col: 0
+    row: 54
+    col: 8
     width: 4
     height: 2
   - title: Second Metric (copy)
     name: Second Metric (copy)
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.dynamic_measure_label]
@@ -579,22 +646,26 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 55
+    row: 54
     col: 16
     width: 4
     height: 2
   - title: Performance by Designated Metro Area
     name: Performance by Designated Metro Area
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
-    type: looker_map
+    type: looker_geo_choropleth
     fields: [impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.dbm_designated_market_area_dma_id]
-    filters: {}
     sorts: [impression_funnel_dv360.dynamic_measure desc]
     limit: 500
     column_limit: 50
+    map: auto
+    map_projection: ''
+    show_view_names: false
+    quantize_colors: false
+    empty_color: ''
     map_plot_mode: points
     heatmap_gridlines: true
     heatmap_gridlines_empty: true
@@ -612,16 +683,12 @@
     map_marker_units: meters
     map_marker_proportional_scale_type: linear
     map_marker_color_mode: fixed
-    show_view_names: false
     show_legend: true
     quantize_map_value_colors: false
     reverse_map_value_colors: false
     map_latitude: 37.849556844898764
     map_longitude: -109.75067138671876
     map_zoom: 3
-    map: usa
-    map_projection: ''
-    quantize_colors: false
     defaults_version: 1
     series_types: {}
     show_row_numbers: true
@@ -641,33 +708,35 @@
     show_comparison_label: true
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 41
+    row: 38
     col: 0
     width: 12
-    height: 8
+    height: 10
   - title: IO Comparison Over Time
     name: IO Comparison Over Time
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_line
-    fields: [impression_funnel_dv360.dynamic_measure, dynamic_io_rank.rank_comparitor, impression_funnel_dv360.impression_date]
+    fields: [impression_funnel_dv360.dynamic_measure, dynamic_io_rank.rank_comparitor,
+      impression_funnel_dv360.impression_date]
     pivots: [dynamic_io_rank.rank_comparitor]
     fill_fields: [impression_funnel_dv360.impression_date]
     filters:
       dynamic_io_rank.rank_input: '1'
-    sorts: [dynamic_io_rank.rank_comparitor, impression_funnel_dv360.impression_date desc]
+    sorts: [dynamic_io_rank.rank_comparitor, impression_funnel_dv360.impression_date
+        desc]
     limit: 500
     column_limit: 50
-    x_axis_gridlines: true
+    x_axis_gridlines: false
     y_axis_gridlines: false
     show_view_names: false
     show_y_axis_labels: true
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
-    show_x_axis_label: true
+    show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
     x_axis_reversed: false
@@ -684,6 +753,15 @@
     y_axis_combined: true
     show_null_points: true
     interpolation: monotone
+    y_axes: [{label: '', orientation: left, series: [{axisId: impression_funnel_dv360.dynamic_measure,
+            id: 1. 14443871 - impression_funnel_dv360.dynamic_measure, name: 1. 14443871},
+          {axisId: impression_funnel_dv360.dynamic_measure, id: 2. 14193653 - impression_funnel_dv360.dynamic_measure,
+            name: 2. 14193653}, {axisId: impression_funnel_dv360.dynamic_measure,
+            id: 3. 12037656 - impression_funnel_dv360.dynamic_measure, name: 3. 12037656},
+          {axisId: impression_funnel_dv360.dynamic_measure, id: Rest of Insertion
+              Orders - impression_funnel_dv360.dynamic_measure, name: Rest of Insertion
+              Orders}], showLabels: true, showValues: false, unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}]
     series_types:
       Rest of Insertion Orders - impression_funnel_dv360.dynamic_measure: area
     ordering: none
@@ -714,15 +792,15 @@
     hidden_fields:
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 57
+    row: 56
     col: 12
     width: 12
     height: 8
   - title: Total Line Items
     name: Total Line Items
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.line_item_count_label]
@@ -742,15 +820,15 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 55
+    row: 54
     col: 4
     width: 4
     height: 2
   - title: Total Line Items (copy)
     name: Total Line Items (copy)
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.line_item_count_label]
@@ -770,15 +848,15 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 55
+    row: 54
     col: 12
     width: 4
     height: 2
   - title: Total Line Items (copy 2)
     name: Total Line Items (copy 2)
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.line_item_count_label]
@@ -798,23 +876,25 @@
     defaults_version: 1
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 55
+    row: 54
     col: 20
     width: 4
     height: 2
   - title: Campaign Benchmark
     name: Campaign Benchmark
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_line
-    fields: [impression_funnel_dv360.campaign_comparison, impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.impression_date]
+    fields: [impression_funnel_dv360.campaign_comparison, impression_funnel_dv360.dynamic_measure,
+      impression_funnel_dv360.impression_date]
     pivots: [impression_funnel_dv360.campaign_comparison]
     fill_fields: [impression_funnel_dv360.impression_date]
     filters:
-      impression_funnel_dv360.impression_date: 5 days
-    sorts: [impression_funnel_dv360.dynamic_measure desc 0, impression_funnel_dv360.campaign_comparison]
+      impression_funnel_dv360.impression_date: 7 days
+    sorts: [impression_funnel_dv360.campaign_comparison 0, impression_funnel_dv360.impression_date
+        desc]
     limit: 500
     column_limit: 50
     x_axis_gridlines: false
@@ -824,7 +904,7 @@
     show_y_axis_ticks: true
     y_axis_tick_density: default
     y_axis_tick_density_custom: 5
-    show_x_axis_label: true
+    show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
     x_axis_reversed: false
@@ -832,7 +912,7 @@
     plot_size_by_field: false
     trellis: ''
     stacking: ''
-    limit_displayed_rows: false
+    limit_displayed_rows: true
     legend_position: center
     point_style: circle_outline
     show_value_labels: true
@@ -841,7 +921,25 @@
     y_axis_combined: true
     show_null_points: true
     interpolation: monotone
+    y_axes: [{label: '', orientation: left, series: [{axisId: impression_funnel_dv360.dynamic_measure,
+            id: 1. 20205054 - impression_funnel_dv360.dynamic_measure, name: 1. 20205054},
+          {axisId: impression_funnel_dv360.dynamic_measure, id: 2. Rest of Campaigns
+              - impression_funnel_dv360.dynamic_measure, name: 2. Rest of Campaigns}],
+        showLabels: true, showValues: false, unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}]
+    limit_displayed_rows_values:
+      show_hide: hide
+      first_last: first
+      num_rows: '1'
+    hidden_series: [1. 24347206 - impression_funnel_dv360.dynamic_measure]
     series_types: {}
+    series_colors:
+      1. 20205054 - impression_funnel_dv360.dynamic_measure: "#FBBC04"
+      1. 20380741 - impression_funnel_dv360.dynamic_measure: "#EA4335"
+      1. 24283272 - impression_funnel_dv360.dynamic_measure: "#FBBC04"
+      1. 24193427 - impression_funnel_dv360.dynamic_measure: "#FBBC04"
+      1. 24221270 - impression_funnel_dv360.dynamic_measure: "#EA4335"
+      2. Rest of Campaigns - impression_funnel_dv360.dynamic_measure: "#34A853"
     ordering: none
     show_null_labels: false
     show_totals_labels: false
@@ -851,19 +949,19 @@
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
       Campaign ID: impression_funnel_dv360.campaign_input
-    row: 8
+    row: 5
     col: 12
     width: 12
     height: 8
   - title: Insertion Order Breakdown
     name: Insertion Order Breakdown
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_grid
-    fields: [impression_funnel_dv360.dbm_revenue, impression_funnel_dv360.count_impressions, impression_funnel_dv360.dynamic_measure,
-      impression_funnel_dv360.dbm_insertion_order_id]
+    fields: [impression_funnel_dv360.dbm_revenue, impression_funnel_dv360.dynamic_measure,
+      impression_funnel_dv360.dbm_insertion_order_id, impression_funnel_dv360.total_impressions,
+      impression_funnel_dv360.total_clicks, impression_funnel_dv360.total_conversions]
     filters:
-      impression_funnel_dv360.dbm_line_item_id: NOT NULL
       impression_funnel_dv360.dbm_insertion_order_id: ''
     sorts: [impression_funnel_dv360.dbm_revenue desc]
     limit: 500
@@ -891,6 +989,12 @@
         is_active: true
       impression_funnel_dv360.count_impressions:
         is_active: true
+      impression_funnel_dv360.total_impressions:
+        is_active: true
+      impression_funnel_dv360.total_clicks:
+        is_active: true
+      impression_funnel_dv360.total_conversions:
+        is_active: true
     series_text_format:
       impression_funnel_dv360.dbm_line_item_id:
         bold: true
@@ -909,20 +1013,19 @@
     series_types: {}
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 20
+    row: 17
     col: 12
     width: 12
     height: 9
   - title: Total Insertion Orders
     name: Total Insertion Orders
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
     fields: [impression_funnel_dv360.insertion_order_count]
-    filters:
-      impression_funnel_dv360.impression_date: 7 days
+    filters: {}
     limit: 500
     custom_color_enabled: true
     show_single_value_title: true
@@ -936,31 +1039,34 @@
     series_types: {}
     defaults_version: 1
     listen:
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 14
+    row: 11
     col: 6
     width: 6
     height: 2
   - title: Percent Change in Metric by IO
     name: Percent Change in Metric by IO
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_bar
-    fields: [impression_funnel_dv360.dbm_insertion_order_id, impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.previous_period]
+    fields: [impression_funnel_dv360.dbm_insertion_order_id, impression_funnel_dv360.dynamic_measure,
+      impression_funnel_dv360.previous_period]
     pivots: [impression_funnel_dv360.previous_period]
     filters:
-      impression_funnel_dv360.dbm_line_item_id: NOT NULL
       impression_funnel_dv360.dbm_insertion_order_id: ''
-      impression_funnel_dv360.impression_date: 14 days
       impression_funnel_dv360.previous_period: "-NULL"
+      impression_funnel_dv360.dynamic_measure: NOT NULL
     sorts: [impression_funnel_dv360.previous_period 0, percent_change desc]
     limit: 500
     column_limit: 50
     dynamic_fields: [{table_calculation: percent_change, label: Percent Change, expression: 'max(pivot_row((${impression_funnel_dv360.dynamic_measure}-pivot_offset(${impression_funnel_dv360.dynamic_measure},-1))/pivot_offset(${impression_funnel_dv360.dynamic_measure},-1)))',
         value_format: !!null '', value_format_name: percent_2, _kind_hint: supermeasure,
-        _type_hint: number}]
+        _type_hint: number}, {table_calculation: is_not_null, label: Is Not Null,
+        expression: 'NOT is_null(${percent_change})', value_format: !!null '', value_format_name: !!null '',
+        _kind_hint: supermeasure, _type_hint: yesno}]
     x_axis_gridlines: false
-    y_axis_gridlines: true
+    y_axis_gridlines: false
     show_view_names: false
     show_y_axis_labels: true
     show_y_axis_ticks: true
@@ -986,6 +1092,9 @@
     show_totals_labels: false
     show_silhouette: false
     totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: percent_change, id: percent_change,
+            name: Percent Change}], showLabels: true, showValues: false, unpinAxis: false,
+        tickDensity: default, tickDensityCustom: 5, type: linear}]
     series_types: {}
     show_row_numbers: false
     transpose: false
@@ -1027,11 +1136,12 @@
     note_state: collapsed
     note_display: above
     note_text: Based on Date Filter, compared to Prior Period
+    hidden_points_if_no: [is_null, is_not_null]
     listen:
       Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.previous_period_filter
+      Date: impression_funnel_dv360.previous_period_filter
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 20
+    row: 17
     col: 0
     width: 12
     height: 9
@@ -1042,30 +1152,27 @@
     body_text: "<center> <b>Recommended Action</b>\U0001f447 Use the KPI Selector\
       \ to pick out a comparison metric, and link out to the IO Lookup Dashboard for\
       \ any IOs that show a large percent change.<center>"
-    row: 16
+    row: 13
     col: 0
     width: 24
     height: 4
-  - name: TO DO on this dashboard
+  - name: ''
     type: text
-    title_text: TO DO on this dashboard
-    body_text: |-
-      - Filter on Spend/Contribution to Performance
-      - vs. Previous Period for the KPIs
-      - Point to Impression Funnel
-      - Update Date filter and all metrics
+    title_text: ''
+    subtitle_text: ''
+    body_text: "<center><b>Disclaimer: We are using IDs for all visualizations. In\
+      \ future iterations, we will be including more descriptive names for all ID\
+      \ fields.</b></center>"
     row: 0
     col: 0
     width: 24
-    height: 4
+    height: 2
   - title: Link to DV360
     name: Link to DV360
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.campaign_id]
-    filters: {}
-    sorts: [impression_funnel_dv360.campaign_id]
+    fields: [impression_funnel_dv360.campaign_id_button]
     limit: 500
     query_timezone: America/Los_Angeles
     custom_color_enabled: true
@@ -1092,90 +1199,19 @@
     defaults_version: 1
     series_types: {}
     listen:
-      Impression Date: impression_funnel_dv360.impression_date
+      Date: impression_funnel_dv360.impression_date
       Campaign ID: impression_funnel_dv360.campaign_id
-    row: 4
-    col: 20
-    width: 4
-    height: 4
-  - title: Performance by Private vs Public Auction
-    name: Performance by Private vs Public Auction
-    model: campaign_manager
-    explore: impression_funnel_dv360
-    type: looker_column
-    fields: [impression_funnel_dv360.dynamic_measure_label, impression_funnel_dv360.is_public]
-    filters:
-      impression_funnel_dv360.is_public: "-NULL"
-    sorts: [impression_funnel_dv360.dynamic_measure_label desc]
-    limit: 500
-    column_limit: 50
-    x_axis_gridlines: false
-    y_axis_gridlines: false
-    show_view_names: false
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: false
-    show_x_axis_ticks: true
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
-    trellis: ''
-    stacking: ''
-    limit_displayed_rows: false
-    legend_position: center
-    point_style: circle
-    show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    ordering: none
-    show_null_labels: false
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    x_axis_label: ''
-    font_size: '12'
-    series_types: {}
-    series_colors:
-      'Yes': "#FBBC04"
-    series_labels:
-      'No': Private
-      'Yes': Public
-    value_labels: legend
-    label_type: labPer
-    defaults_version: 1
-    leftAxisLabelVisible: false
-    leftAxisLabel: ''
-    rightAxisLabelVisible: false
-    rightAxisLabel: ''
-    smoothedBars: false
-    orientation: automatic
-    labelPosition: left
-    percentType: total
-    percentPosition: inline
-    valuePosition: right
-    labelColorEnabled: false
-    labelColor: "#FFF"
-    show_null_points: true
-    listen:
-      Metric to Compare: impression_funnel_dv360.metric_selector
-      Impression Date: impression_funnel_dv360.impression_date
-      Campaign ID: impression_funnel_dv360.campaign_id
-    row: 33
-    col: 0
-    width: 12
-    height: 8
+    row: 2
+    col: 19
+    width: 5
+    height: 3
   - title: Performance by Targeted Segments
     name: Performance by Targeted Segments
-    model: campaign_manager
+    model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_grid
-    fields: [impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.dbm_matching_targeted_segments]
-    filters:
-      impression_funnel_dv360.metric_selector: Conversion Rate
+    fields: [impression_funnel_dv360.dynamic_measure, dbm_matching_targeted_segments_array.dbm_matching_targeted_segments]
+    filters: {}
     sorts: [impression_funnel_dv360.dynamic_measure desc]
     limit: 500
     column_limit: 50
@@ -1246,20 +1282,154 @@
     show_silhouette: false
     totals_color: "#808080"
     defaults_version: 1
-    listen: {}
-    row: 33
+    listen:
+      Metric to Compare: impression_funnel_dv360.metric_selector
+      Date: impression_funnel_dv360.impression_date
+      Campaign ID: impression_funnel_dv360.campaign_id
+    row: 30
     col: 12
     width: 12
     height: 8
+  - title: Performance by Operating System
+    name: Performance by Operating System
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: looker_column
+    fields: [impression_funnel_dv360.dbm_operating_system_id, impression_funnel_dv360.dynamic_measure]
+    filters:
+      impression_funnel_dv360.dynamic_measure: NOT NULL
+    sorts: [impression_funnel_dv360.dynamic_measure desc]
+    limit: 500
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: impression_funnel_dv360.dynamic_measure,
+            id: impression_funnel_dv360.dynamic_measure, name: Dynamic Measure}],
+        showLabels: true, showValues: false, unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}]
+    series_types: {}
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    listen:
+      Metric to Compare: impression_funnel_dv360.metric_selector
+      Date: impression_funnel_dv360.impression_date
+      Campaign ID: impression_funnel_dv360.campaign_id
+    row: 38
+    col: 12
+    width: 12
+    height: 10
+  - title: Cluster Dashboard Button
+    name: Cluster Dashboard Button
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: single_value
+    fields: [impression_funnel_dv360.cluster_dashboards]
+    filters: {}
+    sorts: [impression_funnel_dv360.cluster_dashboards]
+    limit: 500
+    custom_color_enabled: true
+    show_single_value_title: false
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    series_types: {}
+    defaults_version: 1
+    listen:
+      Date: impression_funnel_dv360.impression_date
+      Campaign ID: impression_funnel_dv360.campaign_id
+    row: 2
+    col: 0
+    width: 5
+    height: 3
+  - title: IOs without Clicks/Conversions
+    name: IOs without Clicks/Conversions
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: single_value
+    fields: [impression_funnel_dv360.insertion_order_count]
+    filters:
+      io_facts.dbm_revenue_d: NULL,0
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    defaults_version: 1
+    series_types: {}
+    listen:
+      Metric to Compare: impression_funnel_dv360.metric_selector
+      Date: impression_funnel_dv360.impression_date
+      Campaign ID: impression_funnel_dv360.campaign_id
+    row: 48
+    col: 20
+    width: 4
+    height: 4
   filters:
   - name: Campaign ID
     title: Campaign ID
     type: field_filter
-    default_value: '9611484'
-    allow_multiple_values: true
-    required: false
+    allow_multiple_values: false
+    required: true
     ui_config:
-      type: advanced
+      type: dropdown_menu
       display: popover
     model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
@@ -1268,7 +1438,7 @@
   - name: Metric to Compare
     title: Metric to Compare
     type: field_filter
-    default_value: Cost Per 1000 Impressions
+    default_value: Cost Per Acquisition
     allow_multiple_values: true
     required: false
     ui_config:
@@ -1286,10 +1456,10 @@
     explore: impression_funnel_dv360
     listens_to_filters: []
     field: impression_funnel_dv360.metric_selector
-  - name: Impression Date
+  - name: Date
     title: Date
     type: field_filter
-    default_value: 5 day
+    default_value: 7 day ago for 7 day
     allow_multiple_values: true
     required: false
     ui_config:

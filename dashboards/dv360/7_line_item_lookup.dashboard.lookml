@@ -1,68 +1,8 @@
-- dashboard: io_lookup
-  title: "(2) IO Lookup"
+- dashboard: line_item_lookup
+  title: "(3) Line Item Lookup"
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
-  - title: Line Item Breakouts
-    name: Line Item Breakouts
-    model: campaign_manager_dv360_marketplace
-    explore: impression_funnel_dv360
-    type: looker_grid
-    fields: [impression_funnel_dv360.dbm_line_item_id, impression_funnel_dv360.total_impressions,
-      impression_funnel_dv360.dbm_revenue, impression_funnel_dv360.dynamic_measure,
-      impression_funnel_dv360.dynamic_measure_io_contribution_to_performance]
-    sorts: [impression_funnel_dv360.dynamic_measure desc]
-    limit: 500
-    column_limit: 50
-    show_view_names: false
-    show_row_numbers: false
-    transpose: false
-    truncate_text: true
-    hide_totals: false
-    hide_row_totals: false
-    size_to_fit: true
-    table_theme: white
-    limit_displayed_rows: false
-    enable_conditional_formatting: true
-    header_text_alignment: left
-    header_font_size: '12'
-    rows_font_size: '12'
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    show_sql_query_menu_options: false
-    show_totals: true
-    show_row_totals: true
-    series_cell_visualizations:
-      impression_funnel_dv360.dbm_revenue:
-        is_active: true
-      impression_funnel_dv360.count_impressions:
-        is_active: true
-      impression_funnel_dv360.total_impressions:
-        is_active: true
-    series_text_format:
-      impression_funnel_dv360.dbm_line_item_id:
-        bold: true
-        fg_color: "#4285F4"
-        align: center
-        italic: true
-    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: "#4285F4",
-        font_color: !!null '', color_application: {collection_id: google, palette_id: google-sequential-0},
-        bold: false, italic: false, strikethrough: false, fields: [impression_funnel_dv360.dynamic_measure]}]
-    series_value_format:
-      impression_funnel_dv360.dbm_line_item_id:
-        name: id
-        format_string: '0'
-        label: ID
-    defaults_version: 1
-    series_types: {}
-    listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
-      Impression Date: impression_funnel_dv360.impression_date
-    row: 4
-    col: 13
-    width: 11
-    height: 6
   - title: Performance by Sites (Top 10)
     name: Performance by Sites (Top 10)
     model: campaign_manager_dv360_marketplace
@@ -109,8 +49,8 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 19
     col: 12
     width: 12
@@ -157,8 +97,8 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 12
     col: 12
     width: 12
@@ -232,21 +172,20 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 26
     col: 12
     width: 12
     height: 6
-  - title: IO ID
-    name: IO ID
+  - title: Line Item ID
+    name: Line Item ID
     model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: single_value
-    fields: [impression_funnel_dv360.dbm_insertion_order_id]
+    fields: [impression_funnel_dv360.dbm_line_item_id]
     filters:
       impression_funnel_dv360.impression_date: 2 days
-    sorts: [impression_funnel_dv360.dbm_insertion_order_id]
     limit: 500
     column_limit: 50
     custom_color_enabled: true
@@ -261,7 +200,7 @@
     series_types: {}
     defaults_version: 1
     listen:
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 2
     col: 5
     width: 19
@@ -342,7 +281,7 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 32
     col: 9
     width: 15
@@ -409,8 +348,8 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 26
     col: 0
     width: 12
@@ -471,11 +410,11 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 4
     col: 5
-    width: 8
+    width: 19
     height: 6
   - title: Total Impressions
     name: Total Impressions
@@ -504,20 +443,20 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.previous_period_filter
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 2
     col: 0
     width: 5
     height: 4
   - name: <font color="#34A853" size="45" weight="bold"><i class="fa fa-tachometer"
       aria-hidden="true"></i><strong> DV360 Insights </strong> <font color= "#4285F4"size="45">
-      IO Overview </font>
+      Line Item Overview </font>
     type: text
     title_text: <font color="#34A853" size="4.5" weight="bold"><i class="fa fa-tachometer"
       aria-hidden="true"></i><strong> DV360 Insights </strong> <font color= "#4285F4"size="4.5">
-      IO Overview </font>
-    subtitle_text: How is this insertion order performing?
+      Line Item Overview </font>
+    subtitle_text: How is this line item performing?
     body_text: ''
     row: 0
     col: 0
@@ -591,8 +530,8 @@
     show_null_points: true
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 19
     col: 0
     width: 12
@@ -675,8 +614,8 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 32
     col: 0
     width: 9
@@ -740,8 +679,8 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 12
     col: 0
     width: 12
@@ -773,26 +712,13 @@
     defaults_version: 1
     listen:
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.previous_period_filter
+      Line Item ID: impression_funnel_dv360.dbm_line_item_id
     row: 6
     col: 0
     width: 5
     height: 4
   filters:
-  - name: Insertion Order
-    title: Insertion Order
-    type: field_filter
-    allow_multiple_values: true
-    required: true
-    ui_config:
-      type: advanced
-      display: popover
-      options: []
-    model: campaign_manager_dv360_marketplace
-    explore: impression_funnel_dv360
-    listens_to_filters: []
-    field: impression_funnel_dv360.dbm_insertion_order_id
   - name: Performance Metric
     title: Performance Metric
     type: field_filter
@@ -828,3 +754,12 @@
     explore: impression_funnel_dv360
     listens_to_filters: []
     field: impression_funnel_dv360.impression_date
+  - name: Line Item ID
+    title: Line Item ID
+    type: number_filter
+    allow_multiple_values: true
+    required: true
+    ui_config:
+      type: advanced
+      display: popover
+      options: []

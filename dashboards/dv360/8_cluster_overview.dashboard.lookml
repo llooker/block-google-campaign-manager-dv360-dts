@@ -1,17 +1,18 @@
-- dashboard: io_lookup
-  title: "(2) IO Lookup"
+- dashboard: cluster_lookup
+  title: "(4) Cluster Overview"
   layout: newspaper
   preferred_viewer: dashboards-next
   elements:
-  - title: Line Item Breakouts
-    name: Line Item Breakouts
+  - title: Campaign Breakouts
+    name: Campaign Breakouts
     model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
     type: looker_grid
-    fields: [impression_funnel_dv360.dbm_line_item_id, impression_funnel_dv360.total_impressions,
-      impression_funnel_dv360.dbm_revenue, impression_funnel_dv360.dynamic_measure,
-      impression_funnel_dv360.dynamic_measure_io_contribution_to_performance]
-    sorts: [impression_funnel_dv360.dynamic_measure desc]
+    fields: [impression_funnel_dv360.total_impressions, impression_funnel_dv360.dbm_revenue,
+      impression_funnel_dv360.dynamic_measure, impression_funnel_dv360.campaign_id]
+    filters:
+      impression_funnel_dv360.dbm_revenue: ">0"
+    sorts: [impression_funnel_dv360.dbm_revenue desc]
     limit: 500
     column_limit: 50
     show_view_names: false
@@ -56,12 +57,12 @@
     defaults_version: 1
     series_types: {}
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 4
-    col: 13
-    width: 11
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 22
+    col: 12
+    width: 12
     height: 6
   - title: Performance by Sites (Top 10)
     name: Performance by Sites (Top 10)
@@ -108,10 +109,10 @@
       impression_funnel_dv360.dynamic_measure_label: "#FBBC04"
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 19
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 35
     col: 12
     width: 12
     height: 7
@@ -156,10 +157,10 @@
     series_types: {}
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 12
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 28
     col: 12
     width: 12
     height: 7
@@ -231,48 +232,13 @@
     reverse_map_value_colors: false
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 26
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 42
     col: 12
     width: 12
     height: 6
-  - title: IO ID
-    name: IO ID
-    model: campaign_manager_dv360_marketplace
-    explore: impression_funnel_dv360
-    type: single_value
-    fields: [impression_funnel_dv360.dbm_insertion_order_id]
-    filters:
-      impression_funnel_dv360.impression_date: 2 days
-    sorts: [impression_funnel_dv360.dbm_insertion_order_id]
-    limit: 500
-    column_limit: 50
-    custom_color_enabled: true
-    show_single_value_title: false
-    show_comparison: false
-    comparison_type: value
-    comparison_reverse_colors: false
-    show_comparison_label: true
-    enable_conditional_formatting: false
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    series_types: {}
-    defaults_version: 1
-    listen:
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
-    row: 2
-    col: 5
-    width: 19
-    height: 2
-  - name: Pacing Overview
-    type: text
-    title_text: Pacing Overview
-    row: 10
-    col: 0
-    width: 24
-    height: 2
   - title: Conversions by DOW & TOD
     name: Conversions by DOW & TOD
     model: campaign_manager_dv360_marketplace
@@ -282,8 +248,7 @@
       impression_funnel_dv360.total_conversions]
     pivots: [impression_funnel_dv360.impression_day_of_week]
     fill_fields: [impression_funnel_dv360.impression_hour_of_day, impression_funnel_dv360.impression_day_of_week]
-    filters:
-      impression_funnel_dv360.impression_date: 14 days
+    filters: {}
     sorts: [impression_funnel_dv360.impression_day_of_week 0, impression_funnel_dv360.impression_hour_of_day]
     limit: 500
     query_timezone: America/Los_Angeles
@@ -341,9 +306,10 @@
     totals_color: "#808080"
     defaults_version: 1
     listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_id
       Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
-    row: 32
+    row: 48
     col: 9
     width: 15
     height: 9
@@ -408,10 +374,10 @@
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 26
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 42
     col: 0
     width: 12
     height: 6
@@ -470,12 +436,12 @@
       impression_funnel_dv360.dbm_revenue: Spend
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 4
-    col: 5
-    width: 8
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 22
+    col: 0
+    width: 12
     height: 6
   - title: Total Impressions
     name: Total Impressions
@@ -503,26 +469,13 @@
     series_types: {}
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.previous_period_filter
-    row: 2
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 18
     col: 0
-    width: 5
+    width: 8
     height: 4
-  - name: <font color="#34A853" size="45" weight="bold"><i class="fa fa-tachometer"
-      aria-hidden="true"></i><strong> DV360 Insights </strong> <font color= "#4285F4"size="45">
-      IO Overview </font>
-    type: text
-    title_text: <font color="#34A853" size="4.5" weight="bold"><i class="fa fa-tachometer"
-      aria-hidden="true"></i><strong> DV360 Insights </strong> <font color= "#4285F4"size="4.5">
-      IO Overview </font>
-    subtitle_text: How is this insertion order performing?
-    body_text: ''
-    row: 0
-    col: 0
-    width: 24
-    height: 2
   - title: Performance by Auction Type
     name: Performance by Auction Type
     model: campaign_manager_dv360_marketplace
@@ -590,10 +543,10 @@
     labelColor: "#FFF"
     show_null_points: true
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 19
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 35
     col: 0
     width: 12
     height: 7
@@ -674,10 +627,10 @@
     totals_color: "#808080"
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 32
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 48
     col: 0
     width: 9
     height: 9
@@ -739,10 +692,10 @@
     conditional_formatting_include_nulls: false
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.impression_date
-    row: 12
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 28
     col: 0
     width: 12
     height: 7
@@ -772,27 +725,528 @@
     series_types: {}
     defaults_version: 1
     listen:
-      Performance Metric: impression_funnel_dv360.metric_selector
-      Insertion Order: impression_funnel_dv360.dbm_insertion_order_id
       Impression Date: impression_funnel_dv360.previous_period_filter
-    row: 6
-    col: 0
-    width: 5
+      Centroid ID: cluster_predict.centroid_id
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 18
+    col: 8
+    width: 8
     height: 4
-  filters:
-  - name: Insertion Order
-    title: Insertion Order
-    type: field_filter
-    allow_multiple_values: true
-    required: true
-    ui_config:
-      type: advanced
-      display: popover
-      options: []
+  - title: Average Centroid Distance
+    name: Average Centroid Distance
+    model: campaign_manager_dv360_marketplace
+    explore: cluster_predict
+    type: single_value
+    fields: [cluster_predict.average_centroid_distance]
+    limit: 500
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    series_types: {}
+    defaults_version: 1
+    listen:
+      Centroid ID: cluster_predict.centroid_id
+    row: 18
+    col: 16
+    width: 8
+    height: 4
+  - name: Cluster Overview
+    type: text
+    title_text: Cluster Overview
+    subtitle_text: ''
+    body_text: "<center>Comparison between this cluster and other clusters in the\
+      \ specified date range</center>"
+    row: 0
+    col: 0
+    width: 24
+    height: 3
+  - name: Cluster Performance
+    type: text
+    title_text: Cluster Performance
+    subtitle_text: ''
+    body_text: "<center>Use the Centroid ID filter to focus on a particular cluster</center>"
+    row: 15
+    col: 0
+    width: 24
+    height: 3
+  - title: CPC Comparison
+    name: CPC Comparison
     model: campaign_manager_dv360_marketplace
     explore: impression_funnel_dv360
-    listens_to_filters: []
-    field: impression_funnel_dv360.dbm_insertion_order_id
+    type: looker_bar
+    fields: [cluster_predict.centroid_id, impression_funnel_dv360.cpc, cluster_predict.is_selected_centroid]
+    filters:
+      cluster_predict.centroid_id: NOT NULL
+    sorts: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid]
+    limit: 500
+    dynamic_fields: [{table_calculation: 'yes', label: 'Yes', expression: 'if(${cluster_predict.is_selected_centroid},${impression_funnel_dv360.cpc},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number},
+      {table_calculation: 'no', label: 'No', expression: 'if(NOT ${cluster_predict.is_selected_centroid},${impression_funnel_dv360.cpc},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number}]
+    query_timezone: America/Los_Angeles
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: No - impression_funnel_dv360.cpc,
+            id: No - impression_funnel_dv360.cpc, name: 'No'}, {axisId: Yes - impression_funnel_dv360.cpc,
+            id: Yes - impression_funnel_dv360.cpc, name: 'Yes'}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    hide_legend: true
+    series_types: {}
+    series_colors:
+      Yes - impression_funnel_dv360.cpc: "#34A853"
+      'yes': "#34A853"
+      'no': "#4285F4"
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [cluster_predict.is_selected_centroid, impression_funnel_dv360.cpc]
+    listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_input
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 3
+    col: 0
+    width: 8
+    height: 6
+  - title: CPA Comparison
+    name: CPA Comparison
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: looker_bar
+    fields: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid, impression_funnel_dv360.cpa]
+    filters:
+      cluster_predict.centroid_id: NOT NULL
+    sorts: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid]
+    limit: 500
+    dynamic_fields: [{table_calculation: 'yes', label: 'Yes', expression: 'if(${cluster_predict.is_selected_centroid},${impression_funnel_dv360.cpa},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number},
+      {table_calculation: 'no', label: 'No', expression: 'if(NOT ${cluster_predict.is_selected_centroid},${impression_funnel_dv360.cpa},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number}]
+    query_timezone: America/Los_Angeles
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: No - impression_funnel_dv360.cpc,
+            id: No - impression_funnel_dv360.cpc, name: 'No'}, {axisId: Yes - impression_funnel_dv360.cpc,
+            id: Yes - impression_funnel_dv360.cpc, name: 'Yes'}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    hide_legend: true
+    series_types: {}
+    series_colors:
+      Yes - impression_funnel_dv360.cpc: "#34A853"
+      Yes - impression_funnel_dv360.cpa: "#34A853"
+      'yes': "#34A853"
+      'no': "#4285F4"
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [impression_funnel_dv360.cpa, cluster_predict.is_selected_centroid]
+    listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_input
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 3
+    col: 8
+    width: 8
+    height: 6
+  - title: Total Spend Comparison
+    name: Total Spend Comparison
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: looker_bar
+    fields: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid, impression_funnel_dv360.dbm_revenue]
+    filters:
+      cluster_predict.centroid_id: NOT NULL
+    sorts: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid]
+    limit: 500
+    dynamic_fields: [{table_calculation: 'yes', label: 'Yes', expression: 'if(${cluster_predict.is_selected_centroid},${impression_funnel_dv360.dbm_revenue},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number},
+      {table_calculation: 'no', label: 'No', expression: 'if(NOT ${cluster_predict.is_selected_centroid},${impression_funnel_dv360.dbm_revenue},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number}]
+    query_timezone: America/Los_Angeles
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: No - impression_funnel_dv360.cpc,
+            id: No - impression_funnel_dv360.cpc, name: 'No'}, {axisId: Yes - impression_funnel_dv360.cpc,
+            id: Yes - impression_funnel_dv360.cpc, name: 'Yes'}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    hide_legend: true
+    series_types: {}
+    series_colors:
+      Yes - impression_funnel_dv360.cpc: "#34A853"
+      Yes - impression_funnel_dv360.dbm_revenue: "#34A853"
+      'yes': "#34A853"
+      'no': "#4285F4"
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [cluster_predict.is_selected_centroid, impression_funnel_dv360.dbm_revenue]
+    listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_input
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 9
+    col: 0
+    width: 8
+    height: 6
+  - title: Total Impressions Comparison
+    name: Total Impressions Comparison
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: looker_bar
+    fields: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid, impression_funnel_dv360.total_impressions]
+    filters:
+      cluster_predict.centroid_id: NOT NULL
+    sorts: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid]
+    limit: 500
+    dynamic_fields: [{table_calculation: 'yes', label: 'Yes', expression: 'if(${cluster_predict.is_selected_centroid},${impression_funnel_dv360.total_impressions},null)',
+        value_format: !!null '', value_format_name: !!null '', _kind_hint: measure,
+        _type_hint: number}, {table_calculation: 'no', label: 'No', expression: 'if(NOT
+          ${cluster_predict.is_selected_centroid},${impression_funnel_dv360.total_impressions},null)',
+        value_format: !!null '', value_format_name: !!null '', _kind_hint: measure,
+        _type_hint: number}]
+    query_timezone: America/Los_Angeles
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: No - impression_funnel_dv360.cpc,
+            id: No - impression_funnel_dv360.cpc, name: 'No'}, {axisId: Yes - impression_funnel_dv360.cpc,
+            id: Yes - impression_funnel_dv360.cpc, name: 'Yes'}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    hide_legend: true
+    series_types: {}
+    series_colors:
+      Yes - impression_funnel_dv360.cpc: "#34A853"
+      Yes - impression_funnel_dv360.dbm_revenue: "#34A853"
+      No - impression_funnel_dv360.total_impressions: "#4285F4"
+      Yes - impression_funnel_dv360.total_impressions: "#34A853"
+      'yes': "#34A853"
+      'no': "#4285F4"
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [cluster_predict.is_selected_centroid, impression_funnel_dv360.total_impressions]
+    listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_input
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 9
+    col: 8
+    width: 8
+    height: 6
+  - title: CPM Comparison
+    name: CPM Comparison
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: looker_bar
+    fields: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid, impression_funnel_dv360.cpm]
+    filters:
+      cluster_predict.centroid_id: NOT NULL
+    sorts: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid]
+    limit: 500
+    dynamic_fields: [{table_calculation: 'yes', label: 'Yes', expression: 'if(${cluster_predict.is_selected_centroid},${impression_funnel_dv360.cpm},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number},
+      {table_calculation: 'no', label: 'No', expression: 'if(NOT ${cluster_predict.is_selected_centroid},${impression_funnel_dv360.cpm},null)',
+        value_format: !!null '', value_format_name: usd, _kind_hint: measure, _type_hint: number}]
+    query_timezone: America/Los_Angeles
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: No - impression_funnel_dv360.cpc,
+            id: No - impression_funnel_dv360.cpc, name: 'No'}, {axisId: Yes - impression_funnel_dv360.cpc,
+            id: Yes - impression_funnel_dv360.cpc, name: 'Yes'}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    hide_legend: true
+    series_types: {}
+    series_colors:
+      Yes - impression_funnel_dv360.cpc: "#34A853"
+      No - impression_funnel_dv360.cpm: "#4285F4"
+      Yes - impression_funnel_dv360.cpm: "#34A853"
+      'yes': "#34A853"
+      'no': "#4285F4"
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [impression_funnel_dv360.cpm, cluster_predict.is_selected_centroid]
+    listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_input
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 3
+    col: 16
+    width: 8
+    height: 6
+  - title: Total Conversions Comparison
+    name: Total Conversions Comparison
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    type: looker_bar
+    fields: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid, impression_funnel_dv360.total_conversions]
+    filters:
+      cluster_predict.centroid_id: NOT NULL
+    sorts: [cluster_predict.centroid_id, cluster_predict.is_selected_centroid]
+    limit: 500
+    dynamic_fields: [{table_calculation: 'yes', label: 'Yes', expression: 'if(${cluster_predict.is_selected_centroid},${impression_funnel_dv360.total_conversions},null)',
+        value_format: !!null '', value_format_name: !!null '', _kind_hint: measure,
+        _type_hint: number}, {table_calculation: 'no', label: 'No', expression: 'if(NOT
+          ${cluster_predict.is_selected_centroid},${impression_funnel_dv360.total_conversions},null)',
+        value_format: !!null '', value_format_name: !!null '', _kind_hint: measure,
+        _type_hint: number}]
+    query_timezone: America/Los_Angeles
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: No - impression_funnel_dv360.cpc,
+            id: No - impression_funnel_dv360.cpc, name: 'No'}, {axisId: Yes - impression_funnel_dv360.cpc,
+            id: Yes - impression_funnel_dv360.cpc, name: 'Yes'}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    hide_legend: true
+    series_types: {}
+    series_colors:
+      Yes - impression_funnel_dv360.cpc: "#34A853"
+      Yes - impression_funnel_dv360.dbm_revenue: "#34A853"
+      No - impression_funnel_dv360.total_impressions: "#4285F4"
+      Yes - impression_funnel_dv360.total_impressions: "#34A853"
+      Yes - impression_funnel_dv360.total_conversions: "#34A853"
+      'yes': "#34A853"
+      'no': "#4285F4"
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [cluster_predict.is_selected_centroid, impression_funnel_dv360.total_conversions]
+    listen:
+      Impression Date: impression_funnel_dv360.impression_date
+      Centroid ID: cluster_predict.centroid_input
+      Performance Metric: impression_funnel_dv360.metric_selector
+    row: 9
+    col: 16
+    width: 8
+    height: 6
+  filters:
   - name: Performance Metric
     title: Performance Metric
     type: field_filter
@@ -817,7 +1271,7 @@
   - name: Impression Date
     title: Impression Date
     type: field_filter
-    default_value: 7 days
+    default_value: 7 day
     allow_multiple_values: true
     required: false
     ui_config:
@@ -828,3 +1282,13 @@
     explore: impression_funnel_dv360
     listens_to_filters: []
     field: impression_funnel_dv360.impression_date
+  - name: Centroid ID
+    title: Centroid ID
+    type: field_filter
+    default_value: '1'
+    allow_multiple_values: true
+    required: false
+    model: campaign_manager_dv360_marketplace
+    explore: impression_funnel_dv360
+    listens_to_filters: []
+    field: cluster_predict.centroid_id
