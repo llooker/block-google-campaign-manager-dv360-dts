@@ -1,23 +1,23 @@
 {
-  "label": "Google Campaign Manager",
-  "category_label": "Models",
-  "branding": {
-      "image_uri": "https://marketplace-api.looker.com/block-icons/cm-dv360-icon.png",
-      "tagline": " ",
-      "badge": "Beta"
-  },
-  "constants": {
-    "CONFIG_PROJECT_NAME": {
-      "label": "Config Project Name"
+    "label": "Google Campaign Manager + DV360",
+    "category_label": "Models",
+    "branding": {
+        "image_uri": "https://marketplace-api.looker.com/block-icons/cm-dv360-icon.png",
+        "tagline": " ",
+        "badge": "Beta"
     },
-    "CONNECTION_NAME": {
-      "label": "Connection Name",
-      "value_constraint": "connection"
-    }
+    "constants": {
+      "CONFIG_PROJECT_NAME": {
+        "label": "Config Project Name"
+      },
+      "CONNECTION_NAME": {
+        "label": "Connection Name",
+        "value_constraint": "connection"
+      }
   },
   "models": [
       {
-          "name": "campaign_manager_marketplace",
+          "name": "campaign_manager_dv360_marketplace",
           "connection_constant": "CONNECTION_NAME"
       }
   ],
