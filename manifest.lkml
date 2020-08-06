@@ -4,28 +4,23 @@ constant: CONFIG_PROJECT_NAME {
   value: "cm-block-config"
   export: override_required
 }
-
 constant: CONNECTION_NAME {
-  #value: "bigquery-campaign-manager-connection"
-  value: "db-platform-sol-cm"
+  value: "your_bq_connection_name"
   export: override_required
 }
-
 constant: PROJECT_NAME {
-  #value: "project-name"
-  value: "db-platform-sol"
+  value: "your_bq_project_name"
   export: override_optional
 }
 constant: DATASET_NAME {
-  #value: "dataset-name"
-  value: "Comcast8667"
+  value: "your_bq_campaign_manager_dataset"
   export: override_optional
 }
 constant: CAMPAIGN_MANAGER_ID {
-  #value: "id-number"
-  value: "8667"
+  value: "your_campaign_manager_id"
   export: override_optional
 }
+
 constant: DV360_PARTNER_ID {
   ## This is used for links
   value: ""
