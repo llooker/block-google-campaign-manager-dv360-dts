@@ -5,7 +5,7 @@
   elements:
   - title: Top 10 Campaigns
     name: Top 10 Campaigns
-    model: campaign_manager_marketplace
+    model: campaign_manager_dv360_marketplace
     explore: impression
     type: looker_bar
     fields: [impression.distinct_users, impression.count, impression.campaign_id]
@@ -106,7 +106,7 @@
     height: 3
   - title: Top 10 Advertisers
     name: Top 10 Advertisers
-    model: campaign_manager_marketplace
+    model: campaign_manager_dv360_marketplace
     explore: impression
     type: looker_bar
     fields: [impression.distinct_users, impression.count, impression.advertiser_id]
@@ -192,7 +192,7 @@
     height: 7
   - title: Top 10 Sites
     name: Top 10 Sites
-    model: campaign_manager_marketplace
+    model: campaign_manager_dv360_marketplace
     explore: impression
     type: looker_bar
     fields: [impression.distinct_users, impression.count, impression.site_id_dcm]
@@ -289,15 +289,9 @@
     col: 0
     width: 24
     height: 3
-<<<<<<< HEAD
-  - title: Breakdown (A)
-    name: Breakdown (A)
-    model: campaign_manager_marketplace
-=======
   - title: Prospecting Breakdown
     name: Prospecting Breakdown
     model: campaign_manager_dv360_marketplace
->>>>>>> branch 'master' of git@github.com:llooker/block-google-campaign-manager-dv360-dts.git
     explore: impression
     type: looker_line
     fields: [impression.impressions_per_user, impression.event_date, impression.distinct_users]
@@ -357,15 +351,9 @@
     col: 0
     width: 8
     height: 6
-<<<<<<< HEAD
-  - title: Breakdown (B)
-    name: Breakdown (B)
-    model: campaign_manager_marketplace
-=======
   - title: Retargeting Breakdown
     name: Retargeting Breakdown
     model: campaign_manager_dv360_marketplace
->>>>>>> branch 'master' of git@github.com:llooker/block-google-campaign-manager-dv360-dts.git
     explore: impression
     type: looker_line
     fields: [impression.impressions_per_user, impression.event_date, impression.distinct_users]
@@ -425,15 +413,9 @@
     col: 8
     width: 8
     height: 6
-<<<<<<< HEAD
-  - title: Breakdown (C)
-    name: Breakdown (C)
-    model: campaign_manager_marketplace
-=======
   - title: Brand Breakdown
     name: Brand Breakdown
     model: campaign_manager_dv360_marketplace
->>>>>>> branch 'master' of git@github.com:llooker/block-google-campaign-manager-dv360-dts.git
     explore: impression
     type: looker_line
     fields: [impression.impressions_per_user, impression.event_date, impression.distinct_users]
@@ -597,7 +579,7 @@
       - seven
       - fourteen
       - thirty
-    model: campaign_manager_marketplace
+    model: campaign_manager_dv360_marketplace
     explore: impression
     listens_to_filters: []
     field: impression.comparison_type

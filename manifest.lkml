@@ -1,9 +1,10 @@
-project_name: "block-google-campaign-manager-dts"
+project_name: "block-google-campaign-manager-dv360-dts"
 
 constant: CONFIG_PROJECT_NAME {
   value: "block-google-campaign-manager-dv360-dts-config"
   export: override_optional
 }
+
 constant: CONNECTION_NAME {
   value: "your_bq_connection_name"
   export: override_required
@@ -20,11 +21,12 @@ constant: CAMPAIGN_MANAGER_ID {
   value: "your_campaign_manager_id"
   export: override_optional
 }
-
 constant: DV360_PARTNER_ID {
   ## This is used for links
   value: ""
 }
+
+
 constant: MINIMUM_SPEND_CLUSTER {
   value: ">0"
   export: override_optional
@@ -44,7 +46,6 @@ constant: MINIMUM_CONVERSIONS_CLUSTER {
   ## To include all, make value: ""
   value: ">0"
 }
-
 
 
 
