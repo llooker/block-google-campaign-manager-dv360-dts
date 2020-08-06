@@ -38,11 +38,34 @@ Some visualizations in the DV360 dashboards are dependent on Contribution To Per
 <!--<br>-->
 
 ### Customizations
-
- * (1) Within the ```Top Performers & Breakdowns``` dashboard there are three breakdown tiles that are configurable. It is recommended to import this dashboard and edit these tiles to create custom classifications based on placement name or campaign tactic. Once configured, you  can drill into these metrics to get an additional level of granularity into underlying factors.
+Campaign Manager: 
+ * Within the ```Top Performers & Breakdowns``` dashboard there are three breakdown tiles that are configurable. It is recommended to import this dashboard and edit these tiles to create custom classifications based on placement name or campaign tactic. Once configured, you  can drill into these metrics to get an additional level of granularity into underlying factors.
+ 
+DV360:
+* You can update the constants in the manifest file to change the size of the data (default is last 60 days), as well as change the criteria for campaigns to be included in the clustering model (see section below)
 
 <br>
 
+### BQML
+ *DV360
+- What is BQML?
+    - [BigQuery ML](https://cloud.google.com/bigquery-ml/docs) enables data scientists and data analysts to build and operationalize ML models on planet-scale structured or semi-structured data, directly inside BigQuery, using simple SQL—in a fraction of the time. 
+
+- What is Clustering?
+    - Clustering is a machine-learning technique that groups together datapoints into clusters such that the datapoints within any one cluster are more similar to one another than they are to datapoints in any other cluster. For more information on clustering, please see [this article](https://www.geeksforgeeks.org/clustering-in-machine-learning/):
+ 
+- Overview of our cluster model
+    - For our block, we are using a k-means clustering model within BQML to group together campaigns based on the campaign spend as well as the number of impressions, clicks, and conversion
+
+- How to modify the cluster model
+    - The variables included in the model are defined within the clustering_dataset native derived tables. To remove any of the included variables, just delete that column from the native derived table. To include any additional variables, just add that column or derived column to the native derived tables definition. For more information on declaring columns in a native derived table, please see [this page](https://docs.looker.com/data-modeling/learning-lookml/creating-ndts#defining_ndt_columns).
+To change the number of clusters, change the constant in the manifest file.
+
+- Output of Model
+    - After the model successfully completes, each campaign will be assigned to the cluster, or centroid, that it belongs to. This cluster will then be available as a dimension, so we can identify the cluster that performs best and use it to filter down other dashboards and reports to gain insight into the trends that made those campaigns successful. 
+
+
+
 ### What if I find an error? Suggestions for improvements?
 
-Great! Blocks were designed for continuous improvement through the help of the entire Looker community and we'd love your input. To report an error or improvement recommendation, please reach out to Looker support via email to support@looker.com or via chat to submit a request. Please be as detailed as possible in your explanation and we'll address it as quick as we can.
+Great! Blocks were designed for continuous improvement through the help of the entire Looker community, and we'd love your input. To log an error or improvement recommendations, simply create a "New Issue" in the corresponding [Github repo for this Block](https://github.com/llooker/google_ga360/issues). Please be as detailed as possible in your explanation, and we'll address it as quick as we can.
